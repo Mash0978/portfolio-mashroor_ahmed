@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Mashroor Ahmed</title>
+    <style>
+        /* Common Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            text-shadow: 0px 0px 10px rgba(0, 170, 255, 0.7);
+        }
+        h2 {
+            font-size: 2rem;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(0, 170, 255, 0.7);
+            margin-bottom: 20px;
+        }
+        h4 {
+            font-size: 0.8rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .profile.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .profile img {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+            border: 3px solid grey;
+        }
+        .about {
+            flex: 1;
+            margin-left: 20px;
+        }
+        .projects {
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        .project {
+            background: #1e1e1e;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .project:hover {
+            box-shadow: 0px 0px 20px rgba(20, 90, 180, 0.4);
+            transition: box-shadow 0.3s ease-in-out, opacity 0.4s ease-in-out;
+        }
+        .project.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 20px;
+            transition: transform 0.7s ease-in-out;
+            transform: translateY(50px); /* Start position below */
+        }
+
+        .project.show .project-content {
+            transform: translateY(0); /* Move to natural position */
+        }
+
+        .project-content.alternate {
+            flex-direction: row;
+        }
+
+        .project-img {
+            width: 45%;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .project-img:hover {
+            transform: scale(1.05);
+        }
+
+        .project-text {
+            width: 45%;
+        }
+
+        .project-text h3 a {
+            color: #00aaff;
+            text-decoration: none;
+        }
+
+        .project-text h3 a:hover {
+            text-decoration: underline;
+        }
+        .contact {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #333;
+        }
+        .contact a {
+            color: #00aaff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .contact a:hover {
+            text-decoration: underline;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #e0e0e0; /* Light Gray */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888; /* Neutral Gray */
+            border-radius: 10px;
+            border: 3px solid #e0e0e0; /* Matches track */
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #666; /* Slightly darker gray */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        a:hover {
+            text-shadow: 0 0 10px #00aaff;
+        }
+
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #00aaff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #scrollTopBtn:hover {
+            background: #0088cc;
+        }
+
+        #scrollTopBtn.show {
+            opacity: 1;
+        }
+        .navbar {
+            border-bottom:2px solid grey;
+            background-color: #121212;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: fixed;
+            top: -110px; /* Hides most of it */
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            transition: top 0.4s ease;
+        }
+
+        /* Just a small peek */
+        .navbar::after {
+            content: "▼";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #00aaff;
+            animation: bounce 2s infinite;
+        }
+
+        /* Slide down on hover */
+        .navbar:hover {
+            top: 0;
+        }
+
+
+        .navbar .container {
+            width: 90%;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00aaff;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #00aaff;
+            font-weight: 500;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .nav-links li a:hover {
+            color: #d17d58;
+            text-shadow: 0 0 5px rgba(209, 125, 88, 0.7);
+        }
+
+        /* A little bounce animation for the ▼ */
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -5px); }
+        }
+
+        /* Light Mode Styles */
+        .light-mode {
+            background-color: rgb(247, 247, 247); /* Softer Light Beige */
+            color: rgb(44, 44, 44); /* Darker Gray for text */
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        /* Header Section */
+        .light-mode header {
+            background-color: rgb(255, 223, 193); /* Soft Peach-Pink */
+            padding: 50px 0;
+            text-shadow: none;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        /* Profile & Project Sections */
+        .light-mode .profile,
+        .light-mode .project {
+            background-color: rgb(255, 255, 255); /* Pure White */
+            border: 1px solid rgb(209, 168, 159); /* Light Soft Brown */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Softer shadow for better depth */
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .light-mode .project:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Enhanced hover effect */
+            transform: translateY(-5px);
+        }
+
+        /* Profile Image Border */
+        .light-mode .profile img {
+            border: 2px solid rgb(181, 153, 142); /* Muted Brown */
+        }
+
+        /* Contact Section */
+        .light-mode .contact {
+            background-color: rgb(255, 223, 193); /* Soft Peach-Pink */
+            border-top: 1px solid rgb(209, 168, 159);
+        }
+
+        /* Links */
+        .light-mode a {
+            color: rgb(196, 101, 70); /* Warm Coral-Orange */
+            transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+        }
+        .light-mode h3 a {
+            color: rgb(196, 101, 70); /* Warm Coral-Orange */
+            transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+        }
+
+        .light-mode a:hover {
+            text-shadow: 0 0 10px rgba(209, 125, 88, 0.7); /* Softer glowing effect */
+            color: rgb(209, 125, 88);
+        }
+
+        /* Scroll-to-Top Button */
+        .light-mode #scrollTopBtn {
+            background: rgb(209, 125, 88); /* Warm Coral-Orange */
+            color: white;
+            transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .light-mode #scrollTopBtn:hover {
+            background: rgb(196, 101, 70); /* Darker Coral-Orange */
+            transform: scale(1.05);
+        }
+
+        /* Header Text */
+        .light-mode h1, .light-mode h2, .light-mode h3 {
+            color: rgb(44, 44, 44); /* Darker Gray */
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.15); /* Softer text shadow */
+        }
+
+        /* Project Images */
+        .light-mode .project img {
+            border: 2px solid rgb(181, 153, 142);
+            transition: box-shadow 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+
+        .light-mode .project img:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* Buttons */
+        .light-mode #toggleModeBtn {
+            background-color: rgb(209, 125, 88) !important;
+            transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .light-mode #toggleModeBtn:hover {
+            background-color: rgb(196, 101, 70) !important;
+            transform: scale(1.05);
+        }
+        /* Light Mode Navbar */
+        .light-mode .navbar {
+            background-color: rgb(255, 255, 255); /* Pure White */
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            position: fixed;
+            top: -110px;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            transition: top 0.4s ease;
+        }
+
+        /* Just a small peek */
+        .light-mode .navbar::after {
+            content: "▼";
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: rgb(196, 101, 70); /* Warm Coral-Orange */
+            animation: bounce 2s infinite;
+        }
+
+        /* Slide down on hover */
+        .light-mode .navbar:hover {
+            top: 0;
+        }
+
+        .light-mode .navbar .container {
+            width: 90%;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .light-mode .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: rgb(196, 101, 70); /* Warm Coral-Orange for the logo */
+        }
+
+        .light-mode .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .light-mode .nav-links li a {
+            text-decoration: none;
+            color: rgb(196, 101, 70); /* Dark Gray for links */
+            font-weight: 500;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .light-mode .nav-links li a:hover {
+            color: rgb(209, 125, 88); /* Softer Coral for hover */
+            text-shadow: 0 0 5px rgba(209, 125, 88, 0.7);
+        }
+
+        /* A little bounce animation for the ▼ */
+        .light-mode @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -5px); }
+        }
+
+
+        /* Ensure links are always underlined */
+        a {
+            text-decoration: underline !important;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<button id="scrollTopBtn">↑</button>
+<nav class="navbar">
+    <div class="container">
+        <h1 class="logo">Mash's Portfolio</h1>
+        <ul class="nav-links">
+            <li><a href="#about">About Me</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+<button id="toggleModeBtn" style="position: fixed; top: 60px; right: 20px; background: #00aaff; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5rem; cursor: pointer;">☀</button>
+
+<div class="container">
+        <header>
+            <h1>Hello, I'm Mashroor</h1>
+            <p>Web Developer & Programmer</p>
+        </header>
+
+        <section class="profile" id="about">
+            <img src="images/me.jpg" alt="Profile Picture">
+            <div class="about" >
+                <h2>About Me</h2>
+                <p>I study at <strong>Dhaka Residential Model College (DRMC)</strong>, The largest school in Bangladesh, covering 52 acres, as well as one of the best schools of south asia. I'm in <strong>Class Eight (English Version)</strong>.</p>
+                <p>I enjoy playing video games, drawing, and coding. While I don’t play games as much now, I used to love <strong>Metroidvania games</strong> and have played <em>Geometry Dash, Hades, and Hollow Knight</em>.</p>
+                <p>I've watched anime like <em>Tokyo Ghoul, Attack on Titan, and Hunter x Hunter</em>, though I don’t watch anime anymore.</p>
+                <p>But what I’m really passionate about is <strong>programming</strong>. So far, I’ve learned <em>Python, HTML, CSS, and JavaScript</em>.</p>
+                <p>My Birthday is on the 19th of November 2010. Oh, and my favorite color? <strong>Black</strong>.</p>
+            </div>
+        </section>
+
+
+<section class="projects" id="projects">
+    <h2>My Projects</h2>
+    <h4>Click On The Headings To Visit Websites</h4>
+
+    <div class="project">
+        <div class="project-content">
+            <div class="project-text">
+                <h3><a href="https://mash-art-gallery.netlify.app/" target="_blank">Art Gallery</a></h3>
+                <p>Some of My Drawings</p>
+            </div>
+            <img src="images/YutaXRika.jpg" class="project-img">
+        </div>
+    </div>
+
+    <div class="project">
+        <div class="project-content alternate">
+            <img src="images/pokecardweb.PNG" class="project-img">
+            <div class="project-text">
+                <h3><a href="https://mypokecard.netlify.app/" target="_blank">Project One</a></h3>
+                <p>Pokemon Cards With Hover Effects. Made with very simple HTML and CSS, displaying uses of hover effects as well as how tags can be used to create an organised card.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="project">
+        <div class="project-content">
+            <div class="project-text">
+                <h3><a href="https://mashroor-ahmed-todolist.netlify.app/" target="_blank">Project Two</a></h3>
+                <p><b>Simple To-Do List</b>. Created using simple HTML, CSS and JavaScript. It demonstrates how to structure content, style pages, and add interactivity, all essential for creating dynamic web applications</p>
+            </div>
+            <img src="images/todolistweb.PNG" class="project-img">
+        </div>
+    </div>
+
+    <div class="project">
+        <div class="project-content alternate">
+            <img src="images/numberguesserweb.PNG" class="project-img">
+            <div class="project-text">
+                <h3><a href="https://mashroor-ahmed-number-guesser.netlify.app/" target="_blank">Project Three</a></h3>
+                <p><b>Number-guessing Game</b>. Created with HTML, CSS and JavaScript. A number guessing game in HTML, CSS, and JS demonstrates JavaScript basics (variables, functions, loops, conditionals), DOM manipulation, event handling, UI design, randomization, and debugging, building a strong foundation for interactive web projects and more complex games.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="project">
+        <div class="project-content">
+            <div class="project-text">
+                <h3><a href="https://mashroor-ahmed-temp-converter.netlify.app/" target="_blank">Project Four</a></h3>
+                <p><b>Temperature Converter</b>. Created using simple HTML, CSS and JavaScript.This demonstrates key skills like event handling, input validation, and dynamic content updates, while also improving UI/UX design and problem-solving abilities. It’s a simple, practical project that builds confidence for larger web development tasks</p>
+            </div>
+            <img src="images/tempconverterweb.PNG" class="project-img">
+        </div>
+    </div>
+
+     <div class="project">
+        <div class="project-content alternate">
+             <img src="images/simplecalculatorweb.PNG" class="project-img">
+            <div class="project-text">
+                <h3><a href="https://mashroor-ahmed-simple-calculator.netlify.app/" target="_blank">Project Five</a></h3>
+                <p><b>Simple Calculator</b>. Created using simple HTML, CSS and a bit complex(?) JavaScript.This demonstrates key skills like event handling, input validation, organization, and dynamic content updates, while also improving UI/UX design and problem-solving abilities. The help of AI may or may not have been used for the creation of this website.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="project">
+        <div class="project-content">
+            <div class="project-text">
+                <h3><a href="https://mashroor-ahmed-quote-generator.netlify.app/" target="_blank">Project Six</a></h3>
+                <p><b>Quote Generator</b>. Created by HTML, CSS and JS using AI. AI helps programmers build websites faster by automating coding, debugging, and optimization. It enhances UX, SEO, and personalization while reducing manual work, allowing developers to focus on creativity and innovation. Mastering AI tools gives a competitive edge in modern web development. </p>
+            </div>
+            <img src="images/quotegeneratorweb.PNG" class="project-img">
+        </div>
+    </div>
+
+</section>
+
+    </div>
+
+    <footer class="contact" id="contact">
+        <h2>Contact Me</h2>
+        <p>Email: <a href="mailto:ahmedmashroor123@gmail.com">ahmedmashroor123@gmail.com</a></p>
+        <p>
+
+            <a href="https://github.com/Mash0978">GitHub</a> |
+            <a href="https://www.instagram.com/mash_0978/">Instagram</a>
+        </p>
+
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const projects = document.querySelectorAll('.project');
+
+    window.addEventListener('scroll', function () {
+        projects.forEach(project => {
+            const rect = project.getBoundingClientRect();
+            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                project.classList.add('show');
+            }
+        });
+    });
+});
+
+window.addEventListener('load', function () {
+    document.querySelector('.profile').classList.add('show');
+});
+
+const scrollBtn = document.getElementById('scrollTopBtn');
+
+window.addEventListener('scroll', function () {
+    if (window.scrollY > 300) {
+        scrollBtn.classList.add('show');
+    } else {
+        scrollBtn.classList.remove('show');
+    }
+});
+
+scrollBtn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Toggle Dark/Light Mode
+const toggleBtn = document.getElementById('toggleModeBtn');
+toggleBtn.addEventListener('click', function () {
+    document.body.classList.toggle('light-mode');
+    if (document.body.classList.contains('light-mode')) {
+        toggleBtn.textContent = "🌙"; // Change to dark mode icon
+    } else {
+        toggleBtn.textContent = "☀"; // Change to light mode icon
+    }
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
